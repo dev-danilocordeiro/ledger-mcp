@@ -1,5 +1,7 @@
 # ledger-mcp
 
+[![CI](https://github.com/dev-danilocordeiro/ledger-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/dev-danilocordeiro/ledger-mcp/actions/workflows/ci.yml)
+
 An MCP server that exposes a double-entry ledger to AI agents. Agents can read balances,
 statements and bank-reconciliation divergences. They can also **propose** reversals and
 adjustments. A proposal changes nothing until a different person with the right scope approves it
