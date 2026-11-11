@@ -1,0 +1,8 @@
+{
+  "request": { "method": "GET", "url": "/v1/accounts/a0000000-0000-4000-8000-000000000005/balance" },
+  "response": {
+    "status": 200,
+    "headers": { "Content-Type": "application/json" },
+    "jsonBody": { "accountId": "a0000000-0000-4000-8000-000000000005", "currency": "BRL", "balanceMinor": 0, "version": 3, "updatedAt": "2026-11-01T10:00:00Z" }
+  }
+}

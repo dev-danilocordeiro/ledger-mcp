@@ -1,0 +1,97 @@
+spring:
+  application:
+    name: ledger-mcp
+  profiles:
+    default: http
+  flyway:
+    locations: classpath:db/migration/{vendor}
+  ai:
+    mcp:
+      server:
+        name: ledger-mcp
+        version: 0.1.0
+        type: SYNC
+        protocol: STREAMABLE
+        instructions: >-
+          Tools over a double-entry ledger with synthetic data. Amounts are integers in minor units
+          (cents) and come with a formatted string; quote the formatted string to users.
+          Read tools: get_account_balance (now), list_account_entries (a period), get_transaction
+          (one transaction), list_reconciliation_divergences (ledger vs bank).
+          Write tools never post on the first call: propose_reversal and propose_adjustment only
+          create a proposal. Show it to the user and stop. approve_proposal executes it and must
+          only be called when a human approver explicitly asks, with the proposal id and its
+          confirmation code; the server refuses approvals from the proposal's author.
+
+ledger:
+  mode: ${LEDGER_MCP_MODE:synthetic}
+  proposals:
+    ttl: 15m
+  live:
+    query:
+      base-url: ${LEDGER_QUERY_URL:}
+      bearer-token: ${LEDGER_QUERY_TOKEN:}
+    core:
+      base-url: ${LEDGER_CORE_URL:}
+      bearer-token: ${LEDGER_CORE_TOKEN:}
+    recon:
+      jdbc-url: ${LEDGER_RECON_JDBC_URL:}
+      username: ${LEDGER_RECON_DB_USER:}
+      password: ${LEDGER_RECON_DB_PASSWORD:}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+
+---
+# Remote use: Streamable HTTP at /mcp, OAuth 2 bearer tokens, PostgreSQL for proposals and audit.
+spring:
+  config:
+    activate:
+      on-profile: http
+  datasource:
+    url: ${LEDGER_MCP_DB_URL:jdbc:postgresql://localhost:5433/ledger_mcp}
+    username: ${LEDGER_MCP_DB_USER:ledger_mcp}
+    password: ${LEDGER_MCP_DB_PASSWORD:ledger_mcp}
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${LEDGER_MCP_ISSUER_URI:http://localhost:8180/realms/ledger}
+  ai:
+    mcp:
+      server:
+        streamable-http:
+          mcp-endpoint: /mcp
+server:
+  port: ${PORT:8085}
+
+---
+# Local use: the client launches this process and talks JSON-RPC over stdin/stdout.
+# Nothing else may be written to stdout, so the banner and console logging are off.
+spring:
+  config:
+    activate:
+      on-profile: stdio
+  main:
+    web-application-type: none
+    banner-mode: off
+  datasource:
+    url: jdbc:h2:file:${LEDGER_MCP_HOME:${user.home}/.ledger-mcp}/ledger-mcp;AUTO_SERVER=FALSE
+    username: sa
+    password: ""
+  ai:
+    mcp:
+      server:
+        stdio: true
+ledger:
+  proposals:
+    approvals-enabled: false
+  stdio:
+    operator: ${LEDGER_MCP_OPERATOR:${user.name}}
+logging:
+  threshold:
+    console: "OFF"
+  file:
+    name: ${LEDGER_MCP_HOME:${user.home}/.ledger-mcp}/ledger-mcp.log

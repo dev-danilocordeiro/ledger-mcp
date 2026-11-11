@@ -1,0 +1,13 @@
+{
+  "priority": 2,
+  "request": {
+    "method": "POST",
+    "url": "/v1/transactions",
+    "headers": { "Idempotency-Key": { "matches": "[0-9a-f-]{36}" } }
+  },
+  "response": {
+    "status": 201,
+    "headers": { "Content-Type": "application/json" },
+    "jsonBody": { "transactionId": "c0000000-0000-4000-8000-000000000001", "postedAt": "2026-11-10T12:00:00Z", "replayed": false }
+  }
+}

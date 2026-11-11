@@ -1,0 +1,19 @@
+{
+  "priority": 1,
+  "request": {
+    "method": "GET",
+    "urlPath": "/v1/accounts/a0000000-0000-4000-8000-000000000001/statement",
+    "queryParameters": { "cursor": { "equalTo": "cursor-page-2" } }
+  },
+  "response": {
+    "status": 200,
+    "headers": { "Content-Type": "application/json" },
+    "jsonBody": {
+      "accountId": "a0000000-0000-4000-8000-000000000001",
+      "entries": [
+        { "transactionId": "b0000000-0000-4000-8000-000000000300", "direction": "DEBIT", "amountMinor": 100, "signedMinor": 100, "currency": "BRL", "occurredAt": "2026-10-02T09:00:00Z" }
+      ],
+      "nextCursor": null
+    }
+  }
+}

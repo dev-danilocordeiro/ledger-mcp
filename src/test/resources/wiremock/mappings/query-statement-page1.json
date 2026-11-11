@@ -1,0 +1,25 @@
+{
+  "priority": 2,
+  "request": {
+    "method": "GET",
+    "urlPath": "/v1/accounts/a0000000-0000-4000-8000-000000000001/statement",
+    "queryParameters": {
+      "from": { "equalTo": "2026-10-01T00:00:00Z" },
+      "to": { "equalTo": "2026-10-31T23:59:59.999999999Z" },
+      "limit": { "equalTo": "2" },
+      "cursor": { "absent": true }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": { "Content-Type": "application/json" },
+    "jsonBody": {
+      "accountId": "a0000000-0000-4000-8000-000000000001",
+      "entries": [
+        { "transactionId": "b0000000-0000-4000-8000-000000000302", "direction": "DEBIT", "amountMinor": 5000, "signedMinor": 5000, "currency": "BRL", "occurredAt": "2026-10-30T09:00:00Z", "externalReference": "NN-001100" },
+        { "transactionId": "b0000000-0000-4000-8000-000000000301", "direction": "CREDIT", "amountMinor": 700, "signedMinor": -700, "currency": "BRL", "occurredAt": "2026-10-29T18:00:00Z" }
+      ],
+      "nextCursor": "cursor-page-2"
+    }
+  }
+}

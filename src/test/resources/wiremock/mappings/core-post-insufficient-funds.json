@@ -1,0 +1,13 @@
+{
+  "priority": 1,
+  "request": {
+    "method": "POST",
+    "url": "/v1/transactions",
+    "bodyPatterns": [ { "matchesJsonPath": "$.entries[?(@.amountMinorUnits == 999999999)]" } ]
+  },
+  "response": {
+    "status": 422,
+    "headers": { "Content-Type": "application/problem+json" },
+    "jsonBody": { "type": "about:blank", "title": "Insufficient funds", "status": 422, "detail": "account a0000000-0000-4000-8000-000000000001 has insufficient funds" }
+  }
+}
